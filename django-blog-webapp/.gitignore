@@ -15,4 +15,7 @@ __pycache__/
 *.pyd
 
 # Environment variables
-.env
+.env 
+
+# Local images
+appv01/static/appv01/images/sweeny.jpg

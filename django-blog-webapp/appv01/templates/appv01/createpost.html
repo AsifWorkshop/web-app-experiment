@@ -1,0 +1,183 @@
+{% extends 'appv01/navbar.html' %}
+
+{% block content %}
+<style>
+    .post-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 90vh;
+        padding: 40px 15px;
+        background-color: #f0f2f5; /* Light grey background to make the white card pop */
+    }
+
+    .create-post-card {
+        width: 100%;
+        max-width: 600px; /* Increased from 500px for better visibility */
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border: 1px solid #e0e0e0;
+    }
+
+    .card-header {
+        padding: 15px 20px;
+        text-align: center;
+        border-bottom: 1px solid #e5e5e5;
+    }
+
+    .card-header h2 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin: 0;
+        color: #1c1e21;
+    }
+
+    .post-body {
+        padding: 20px;
+    }
+
+    .user-profile-section {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    /* User Initial Circle */
+    .initial-avatar {
+        width: 45px;
+        height: 45px;
+        background-color: #ffd700; /* Matching the yellow circle from your Feed */
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 700;
+        font-size: 1.2rem;
+        color: #000;
+        text-transform: uppercase;
+    }
+
+    .username-display {
+        font-weight: 600;
+        font-size: 1rem;
+        color: #050505;
+    }
+
+    /* Inputs */
+    .title-field {
+        width: 100%;
+        border: none;
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-bottom: 12px;
+        outline: none;
+        color: #1c1e21;
+    }
+
+    .content-field {
+        width: 100%;
+        border: none;
+        font-size: 1.1rem;
+        resize: none;
+        outline: none;
+        min-height: 180px;
+        color: #050505;
+    }
+
+    /* Bottom Section */
+    .attachment-box {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        border: 1px solid #ced4da;
+        border-radius: 10px;
+        margin-top: 20px;
+    }
+
+    .attachment-text {
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+
+    .image-btn {
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+
+    .image-btn:hover {
+        transform: scale(1.1);
+    }
+
+    .submit-post-btn {
+        width: 100%;
+        background-color: #1877f2;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 8px;
+        font-weight: 700;
+        font-size: 1rem;
+        margin-top: 20px;
+        transition: background 0.2s;
+    }
+
+    .submit-post-btn:hover {
+        background-color: #166fe5;
+    }
+
+    /* Tag Input - placeholder for your future logic */
+    .tag-field {
+        width: 100%;
+        border: 1px solid #eee;
+        border-radius: 6px;
+        padding: 8px;
+        font-size: 0.9rem;
+        margin-top: 10px;
+        outline-color: #1877f2;
+    }
+</style>
+
+<div class="post-wrapper">
+    <div class="create-post-card">
+        <div class="card-header">
+            <h2>Create Post</h2>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data" class="post-body">
+            {% csrf_token %}
+            
+            <div class="user-profile-section">
+                <div class="initial-avatar">
+                    {{ user.username.0|default:"SW" }}
+                </div>
+                <div class="username-display">
+                    {{ user.username|default:"I_LOVE_SWEENY" }}
+                </div>
+            </div>
+
+            <input type="text" name="title" class="title-field" placeholder="Title of your post..." required>
+
+            <textarea name="content" class="content-field" placeholder="What technical insight are you sharing today?" required></textarea>
+
+            <input type="text" name="tags" class="tag-field" placeholder="Add tags (e.g. backend, python, ai)...">
+
+            <div class="attachment-box">
+                <span class="attachment-text">Add to your post</span>
+                <label for="post-image" class="image-btn">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V5C21 3.89543 20.1046 3 19 3Z" stroke="#45bd62" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M8.5 10C9.32843 10 10 9.32843 10 8.5C10 7.67157 9.32843 7 8.5 7C7.67157 7 7 7.67157 7 8.5C7 9.32843 7.67157 10 8.5 10Z" fill="#45bd62"/>
+                        <path d="M21 15L16 10L5 21" stroke="#45bd62" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </label>
+                <input type="file" id="post-image" name="image" accept="image/*" style="display: none;">
+            </div>
+
+            <button type="submit" class="submit-post-btn">Post</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
