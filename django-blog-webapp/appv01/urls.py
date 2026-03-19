@@ -18,4 +18,5 @@ urlpatterns = [
     path('get-comment-count/<int:post_id>/', views.get_comment_count, name='get_comment_count'),
     path('post/edit/<int:post_id>/', views.edit_post, name='edit_post'),
     path('post/delete/<int:post_id>/', views.delete_post, name='delete_post'),
+    path('search-posts/', views.search_posts, name='search_posts'),
 ]

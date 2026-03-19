@@ -1,8 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+    <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DevBlog Feed</title>
@@ -10,10 +9,14 @@
     <script src="{% static 'like.js' %}" defer></script>
     <script src="{% static 'edit_post.js' %}" defer></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Sofia+Sans:ital,wght@0,1..1000;1,1..1000&display=swap');
         body {
             background-color: #f0f2f5;
-            font-family: 'Inter', sans-serif;
             padding-top: 20px;
+            font-family: "Inter", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 600;
+            font-style: normal;
         }
 
         .blog-card {
@@ -248,7 +251,5 @@
 
 
     </div>
-
 </body>
-
 </html>

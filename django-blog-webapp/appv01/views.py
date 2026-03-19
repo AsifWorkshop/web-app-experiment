@@ -9,6 +9,7 @@ import re
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import F
+from django.db.models import Q
 
 
 # Create your views here.
@@ -263,3 +264,32 @@ def delete_post(request, post_id):
         return JsonResponse({'success': True})
     
     return JsonResponse({'success': False}, status=403)
+
+
+def search_posts(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            query = data.get('q', '').strip()
+            
+            # For debugging
+            print(f"Searching for: {query}")
+
+            if not query:
+                all_ids = list(post.objects.values_list('id', flat=True))
+                return JsonResponse({'matching_ids': all_ids})
+
+            results = post.objects.filter(
+                Q(author__username__icontains=query) | 
+                Q(title__icontains=query) |
+                Q(post_tag__tag__name__icontains=query)
+            ).distinct()
+
+            matching_ids = list(results.values_list('id', flat=True))
+            return JsonResponse({'matching_ids': matching_ids})
+            
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+
+    return JsonResponse({'error': 'Method not allowed'}, status=405)
+
