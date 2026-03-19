@@ -1,6 +1,9 @@
 {% extends 'appv01/navbar.html' %}
-
+{% load static %}
 {% block content %}
+
+<script src="{% static 'createpost.js' %}" defer></script>
+
 <style>
     .post-wrapper {
         display: flex;
@@ -146,7 +149,7 @@
             <h2>Create Post</h2>
         </div>
 
-        <form method="POST" enctype="multipart/form-data" class="post-body">
+        <form id="postForm" class="post-body">
             {% csrf_token %}
             
             <div class="user-profile-section">
@@ -158,11 +161,11 @@
                 </div>
             </div>
 
-            <input type="text" name="title" class="title-field" placeholder="Title of your post..." required>
+            <input type="text" id="title" name="title" class="title-field" placeholder="Title of your post..." required>
 
-            <textarea name="content" class="content-field" placeholder="What technical insight are you sharing today?" required></textarea>
+            <textarea name="content" id="content" class="content-field" placeholder="What technical insight are you sharing today?" required></textarea>
 
-            <input type="text" name="tags" class="tag-field" placeholder="Add tags (e.g. backend, python, ai)...">
+            <input type="text" id="tags" name="tags" class="tag-field" placeholder="Add tags (e.g. backend, python, ai)...">
 
             <div class="attachment-box">
                 <span class="attachment-text">Add to your post</span>

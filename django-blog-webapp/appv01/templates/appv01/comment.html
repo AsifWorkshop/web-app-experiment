@@ -1,0 +1,91 @@
+{% extends 'appv01/navbar.html' %}
+{% load static %}
+{% block content %}
+
+<script src="{% static 'comment.js' %}" defer></script>
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <a href="{% url 'feed' %}" class="btn btn-sm btn-outline-secondary mb-4">← Back to Feed</a>
+
+            <div class="card border-0 shadow-sm mb-4 bg-light">
+                <div class="card-body">
+                    <h4 class="fw-bold">{{ post.title }}</h4>
+                    <p class="text-secondary">{{ post.content }}</p>
+                </div>
+            </div>
+
+            <form method="POST" class="mb-5">
+                {% csrf_token %}
+                <div class="card shadow-sm border-0">
+                    <div class="card-body p-2">
+                        <textarea name="content" class="form-control border-0 shadow-none" placeholder="What are your thoughts?" rows="3" required></textarea>
+                        <div class="text-end mt-2">
+                            <button type="submit" class="btn btn-primary btn-sm px-4">Post Comment</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <h5 class="mb-4">Discussion ({{ comments.count }})</h5>
+
+            {% for c in comments %}
+            <div class="mb-4">
+                <div class="d-flex align-items-start gap-3">
+                    <img src="https://ui-avatars.com/api/?name={{ c.commentator }}&background=random" class="rounded-circle" width="40">
+                    <div class="flex-grow-1">
+                        <div class="bg-white p-3 rounded shadow-sm border">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span class="fw-bold text-primary">@{{ c.commentator.username }}</span>
+                                <small class="text-muted">{{ c.created_at|timesince }} ago</small>
+                            </div>
+                            <p class="mb-2 text-dark">{{ c.comment_content }}</p>
+                            
+                            <div class="d-flex gap-3">
+                                <a href="javascript:void(0)" onclick="toggleReplyForm('{{ c.id }}')" class="text-decoration-none small fw-bold text-secondary">Reply</a>
+                                {% if c.commentator == request.user %}
+                                <a href="{% url 'delete_comment' c.id %}" onclick="return confirm('Delete this comment and all replies?')" class="text-decoration-none small fw-bold text-danger">Delete</a>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div id="reply-form-{{ c.id }}" class="mt-2 d-none">
+                            <form method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="parent_id" value="{{ c.id }}">
+                                <div class="input-group">
+                                    <input type="text" name="content" class="form-control form-control-sm" placeholder="Write a reply..." required>
+                                    <button class="btn btn-sm btn-outline-primary" type="submit">Reply</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        {% if c.replies.all %}
+                        <div class="ms-4 mt-3 border-start ps-3">
+                            {% for r in c.replies.all %}
+                            <div class="d-flex align-items-start gap-2 mb-3">
+                                <img src="https://ui-avatars.com/api/?name={{ r.commentator }}&background=random" class="rounded-circle" width="25">
+                                <div>
+                                    <div class="bg-light p-2 rounded border">
+                                        <span class="fw-bold small">@{{ r.commentator.username }}</span>
+                                        <p class="small mb-0 text-dark">{{ r.reply_content }}</p>
+                                    </div>
+                                    <small class="text-muted" style="font-size: 0.7rem;">{{ r.created_at|timesince }} ago</small>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="text-center py-5">
+                <p class="text-muted italic">No comments here yet. Start the thread!</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
